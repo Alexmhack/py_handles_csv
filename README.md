@@ -1,7 +1,7 @@
 # py_handles_csv
 reading and writing CSV files in python using csv and pandas module
 
-# What CSV stands for ?
+# What CSV Stands For ?
 **CSV** stands for **Comma Separated Values File** is just like a plain file that uses 
 a different approach for structuring data.
 
@@ -30,7 +30,7 @@ python.
 handling csv data. Using python csv library we can perform many tasks on csv files and
 csv data like reading, writing and processing data from csv files.
 
-# Reading CSV file
+# Reading CSV File
 **csv** library has **reader** object for specifically reading purpose of csv files.
 The ```with open()``` function in python opens any file including csv files in text 
 format, the text is then passed onto reader object which does all the processing of 
@@ -59,7 +59,7 @@ with open('employee_data.csv') as csvfile:
 **NOTE:** delimiter specifies the character used to separate each field. The default is 
 the comma (',').
 
-# Options with reader
+# Options With Reader
 There are options with reader object along with ```delimiter``` like ```escapechar``` 
 and ```quotechar```.
 
@@ -116,7 +116,7 @@ with open('employee_data1.csv') as csvfile:
 	
 ```
 
-# Reading csv files into dictionary
+# Reading CSV Files Into Dictionary
 **csv** library along with the simple reader that just reads the plain text into a csv
 formatted data. csv has one more reader object that works in a slightly different way.
 
@@ -197,4 +197,276 @@ by setting the fieldnames optional parameter to a list containing them.
 When writing data into csv file we need to specify the fieldnames attribute for csv file
 which we will see in a minute.
 
+# Writing CSV Data In File
+csv library has **wirter** object and **write_row()** method through which we can write 
+to csv file
 
+**writing_csv.py**
+```
+import csv
+
+with open('employee_file.csv', 'w') as csvfile:
+	employee_writer = csv.writer(csvfile)
+	employee_writer.write_row(['name', 'department', 'started'])
+	employee_writer.writer_row(['John Smith', 'Accounting', 'November'])
+	employee_writer.writer_row(['Erica Meyers', 'IT', 'March'])
+```
+
+Alternatively you could have used 
+
+**writing_csv.py**
+```
+import csv
+
+with open('employee_file.csv', 'w') as csvfile:
+	employee_writer = csv.writer(csvfile, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+	employee_writer.write_row(['name', 'department', 'started'])
+	employee_writer.writer_row(['John Smith', 'Accounting', 'November'])
+	employee_writer.writer_row(['Erica Meyers', 'IT', 'March'])
+
+```
+
+Run the file 
+
+```
+python writing_csv.py
+```
+
+A new file named ```employee_file.csv``` with data
+
+```
+name,department,started
+
+John Smith,Accounting,November
+
+Erica Meyers,IT,March
+
+```
+
+So why is this extra line added after each row, we wouldn't want this to happen. If we
+had another field named **id** then using **row number** to automatically provide **id**
+would completely go wrong. It did go wrong in my [python_intermediate](https://github.com/Alexmhack/python_intermediate/blob/master/python_csv/data.csv
+) tutorial.
+
+Well this happened because in the python3 we need to open the file with a attribute
+```newline=''``` so that newline doesn't use ```\n```
+
+Editing the code a bit,
+
+**writing_csv.py**
+```
+import csv
+
+with open('employee_file.csv', 'w', newline='') as csvfile:
+	employee_writer = csv.writer(csvfile)
+	employee_writer.writerow(['name', 'department', 'started'])
+	employee_writer.writerow(['John Smith', 'Accounting', 'November'])
+	employee_writer.writerow(['Erica Meyers', 'IT', 'March'])
+
+```
+
+Running this version of file would give results,
+
+```
+name,department,started
+John Smith,Accounting,November
+Erica Meyers,IT,March
+```
+
+Here the first row represents the column names, the values start from second line.
+
+The quotechar optional parameter tells the csv writer which character to use when 
+quoting fields while writing.
+
+1. If quoting is set to csv.QUOTE_MINIMAL, then .writerow() will quote fields only if they contain the delimiter or the quotechar. This is the default case.
+2. If quoting is set to csv.QUOTE_ALL, then .writerow() will quote all fields.
+3. If quoting is set to csv.QUOTE_NONNUMERIC, then .writerow() will quote all fields containing text data and convert all numeric fields to the float data type.
+4. If quoting is set to csv.QUOTE_NONE, then .writerow() will escape delimiters instead of quoting them. In this case, you also must provide a value for the escapechar optional parameter.
+
+# Writing From Dictionary Into File
+Just like **csv** has ```DictReader``` for reading data into dictionary, csv also has
+an object to write data from dictionary
+
+**csv_dictwriter.py**
+```
+import csv
+
+with open('employee_file1.csv', 'w', newline='') as csvfile:
+	fieldnames = ['emp_name', 'dept', 'birth_month']
+	employee_writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+
+	employee_writer.writeheader()
+	employee_writer.writerow({'emp_name': 'John Smith', 'dept': 'Accounting', 'birth_month': 'November'})
+	employee_writer.writerow({'emp_name': 'Erica Meyers', 'dept': 'IT', 'birth_month': 'March'})
+```
+
+```csv.DictWriter``` has to be provided the required argument ```fieldnames``` which is
+a list containing the ```keys``` for dictionary.
+
+Just like ```csv.writer``` we use ```writerrow({})``` but this time passing a dict 
+containing the ```values``` for ```keys```
+
+# Parsing CSV File Using [Pandas](http://pandas.pydata.org/index.html)
+**Pandas** library comes into play when you have a lot of data to analyze. **Pandas** is
+highly recommended for processing arge amount of data.
+
+Install pandas using
+
+```
+pip install pandas
+```
+
+**Reading the CSV into a pandas DataFrame is quick and straightforward:**
+
+**pandas_reads_csv.py**
+```
+import pandas
+
+df = pandas.read_csv('hrdata.csv')
+print(df)
+```
+
+Run the file
+
+```
+> python pandas_reads_csv.py
+
+             Name Hire Date   Salary  Sick Days remaining
+0  Graham Chapman  03/15/14  50000.0                   10
+1     John Cleese  06/01/15  65000.0                    8
+2       Eric Idle  05/12/14  45000.0                   10
+3     Terry Jones  11/01/13  70000.0                    3
+4   Terry Gilliam  08/12/14  48000.0                    7
+5   Michael Palin  05/23/13  66000.0                    8
+```
+
+A lot cleaner printing, right!
+
+**So what happened ?**
+
+Just three lines of code and we are done!
+
+```pandas.read_csv(file_path)``` is the piece of code that does all the work. Pandas
+opens, analyzes and reads the csv file and stores the data in **df (dataframe)**
+
+Pandas numbered or actually indexed the data starting from ```0``` this is default 
+nature since we didn't give the ```index_col``` parameter. 
+
+Let's index our dataframe from name field
+
+```
+import pandas 
+
+df = pandas.read_csv('hrdata.csv', index_col='Name')
+print(df)
+```
+
+And what do you know
+
+```
+               Hire Date   Salary  Sick Days remaining
+Name
+Graham Chapman  03/15/14  50000.0                   10
+John Cleese     06/01/15  65000.0                    8
+Eric Idle       05/12/14  45000.0                   10
+Terry Jones     11/01/13  70000.0                    3
+Terry Gilliam   08/12/14  48000.0                    7
+```
+
+Now we see that our ```Hire Dat``` column is of type ```<class 'str'>```.
+
+Let’s fix the data type of the Hire Date field. You can force pandas to read data as a 
+date with the parse_dates optional parameter, which is defined as a list of column 
+names to treat as dates:
+
+```
+import pandas
+
+df = pandas.read_csv('hrdata.csv', index_col='Name', parse_dates=['Hire Date'])
+print(df)
+```
+
+```
+                Hire Date   Salary  Sick Days remaining
+Name
+Graham Chapman 2014-03-15  50000.0                   10
+John Cleese    2015-06-01  65000.0                    8
+Eric Idle      2014-05-12  45000.0                   10
+Terry Jones    2013-11-01  70000.0                    3
+Terry Gilliam  2014-08-12  48000.0                    7
+Michael Palin  2013-05-23  66000.0                    8
+```
+
+Formatted date is printed which is of type ```<class 'pandas._libs.tslibs.timestamps.Timestamp'>```
+
+If the csv file doesn't has the first line that tells the columns for file or you
+want to override the columns and give your own then in that case you can use 
+```header=0```
+
+```
+import pandas
+
+df = pandas.read_csv('hrdata.csv', 
+            index_col='Employee', 
+            parse_dates=['Hired'], 
+            header=0, 
+            names=['Employee', 'Hired','Salary', 'Sick Days'])
+print(df)
+```
+
+On changing the header names we get 
+
+```
+                    Hired   Salary  Sick Days
+Employee
+Graham Chapman 2014-03-15  50000.0         10
+John Cleese    2015-06-01  65000.0          8
+Eric Idle      2014-05-12  45000.0         10
+Terry Jones    2013-11-01  70000.0          3
+Terry Gilliam  2014-08-12  48000.0          7
+Michael Palin  2013-05-23  66000.0          8
+```
+
+# Writing CSV Files With Pandas
+Just as Reading CSV with pandas could be done in three lines of code Writing CSV with 
+pandas is also simple, just using ```df.to_csv(file_path)``` and we are done.
+
+**pandas_to_csv.py**
+```
+import pandas
+
+df = pandas.read_csv(
+	'hrdata.csv',
+	index_col='Employee',
+	parse_dates=['Hired'],
+	header=0,
+	names=['Employee', 'Hired', 'Salary', 'Sick Days']
+)
+
+df.to_csv('hrdata_modified.csv')
+
+df_modified = pandas.read_csv(
+	'hrdata_modified.csv',
+	index_col='Employee',
+	parse_dates=['Hired'],
+)
+
+print(df_modified)
+
+```
+
+Running file we get a new file ```hrdata_modified.csv```
+
+```
+                    Hired   Salary  Sick Days
+Employee
+Graham Chapman 2014-03-15  50000.0         10
+John Cleese    2015-06-01  65000.0          8
+Eric Idle      2014-05-12  45000.0         10
+Terry Jones    2013-11-01  70000.0          3
+Terry Gilliam  2014-08-12  48000.0          7
+Michael Palin  2013-05-23  66000.0          8
+```
+
+This is it, for more tutorial visit my github [page](https://github.com/Alexmhack) or 
+contact me at my blog [CodeMentor](https://www.codementor.tk)
