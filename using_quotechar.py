@@ -1,7 +1,7 @@
 import csv
 
 with open('employee_data1.csv') as csvfile:
-	csv_reader = csv.reader(csvfile)
+	csv_reader = csv.reader(csvfile, quotechar='"', quoting=csv.QUOTE_MINIMAL)
 	line_count = 0
 	for row in csv_reader:
 		if line_count == 0:
