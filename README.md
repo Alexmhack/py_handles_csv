@@ -232,7 +232,7 @@ Run the file
 python writing_csv.py
 ```
 
-A new file named ```employee_file.csv``` with data
+A new file named ```employee_file.csv``` is created
 
 ```
 name,department,started
@@ -469,4 +469,4 @@ Michael Palin  2013-05-23  66000.0          8
 ```
 
 This is it, for more tutorial visit my github [page](https://github.com/Alexmhack) or 
-contact me at my blog [CodeMentor](https://www.codementor.tk)
+contact me at my blog [CodeMentor](http://www.codementor.tk)
