@@ -467,6 +467,3 @@ Terry Jones    2013-11-01  70000.0          3
 Terry Gilliam  2014-08-12  48000.0          7
 Michael Palin  2013-05-23  66000.0          8
 ```
-
-This is it, for more tutorial visit my github [page](https://github.com/Alexmhack) or 
-contact me at my blog [CodeMentor](http://www.codementor.tk)
